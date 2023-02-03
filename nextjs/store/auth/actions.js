@@ -7,3 +7,13 @@ export const updateLogged = (logged) => {
         logged
     };
 };
+
+export const UPDATE_TOKEN = "UPDATE_TOKEN";
+
+export const updateToken = (logged, jwt) => {
+    return {
+        type: UPDATE_TOKEN,
+        logged: logged,
+        jwt: jwt
+    };
+};

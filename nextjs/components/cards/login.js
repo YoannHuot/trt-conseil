@@ -1,24 +1,29 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { SubmitValid } from '../button/button'
+import useAuth from "../../store/auth/hooks";
+import { useRouter } from 'next/router'
 
 const Login = () => {
+    const auth = useAuth();
+    const router = useRouter();
+
     const [mail, setMail] = useState("Y.h@gmail.fr");
     const [password, setPassword] = useState("Yoshi90120!");
     const [role, setRole] = useState("recruteurs")
 
     const handleSubmit = () => {
         const data = { mail: mail, password: password, role: role }
-        axios.get('http://localhost:8000/users/current.php', { params: data })
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-
+        auth.login(data);
     }
 
+    useEffect(() => {
+        if (auth.authStore.logged === true && auth.authStore.jwt.length > 0) {
+            router.push("/homepage")
+        } else {
+            console.log("marche pas fdp");
+        }
+    }, [auth])
 
     return (
         <div className='flex flex-col justify-center'>

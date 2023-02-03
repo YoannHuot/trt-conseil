@@ -43,7 +43,7 @@ const Signup = ({ selected }) => {
 
     const [compagnyValidity, setCompagnyValidity] = useState(false)
 
-    const [role, setRole] = useState("recruteur")
+    const [role, setRole] = useState("recruteurs")
     const [isCandidat, setIsCandidat] = useState(false)
 
     const [candidatValidity, setCandidatValidity] = useState(false)
@@ -73,6 +73,8 @@ const Signup = ({ selected }) => {
             setResponse(auth.response)
         }
     }, [auth.response])
+
+
     useEffect(() => {
         if (isCandidat && passwordValid && nameValidity && firstNameValidity && mailValid) {
             setCandidatValidity(true)
@@ -275,7 +277,7 @@ const Signup = ({ selected }) => {
                 compagny: compagny,
                 role: role
             }
-            auth.login(data)
+            auth.signup(data)
 
 
         } else if (isCandidat && candidatValidity) {
@@ -289,7 +291,7 @@ const Signup = ({ selected }) => {
                 password2: password2,
                 role: role
             }
-            auth.login(data);
+            auth.signup(data);
         }
     }
 
@@ -298,11 +300,24 @@ const Signup = ({ selected }) => {
         if (!auth.authStore.logged) {
             console.warn("User is not logged in!");
         } else if (auth.authStore.logged) {
+            auth.login({ mail: mail, password: password, role: role })
+        }
+    }, [auth.authStore.logged])
+
+
+    useEffect(() => {
+
+        if (!auth.authStore.jwt || auth.authStore.jwt.length < 1) {
+            console.warn("Error 401 : no session token detected");
+        } else if (auth.authStore.jwt && auth.authStore.jwt.length > 1) {
             router.push("/homepage")
         }
-    }, [auth])
+    }, [auth.authStore])
 
 
+    // Quand je clique sur confirmer, je fais lance une fonction auth.login => cette fonction renvoie un token avec approuved_by dedans
+    // Si cette variable est null je suis redirigé vers une page d'attente
+    // Si cette variable est vrai je suis redirigé vers le site 
 
     return (
         <>
@@ -311,10 +326,10 @@ const Signup = ({ selected }) => {
 
                 <label className='mt-4'>Vous êtes  </label>
                 <select defaultValue={role} onChange={(e) => setRole(e.target.value)}>
-                    <option value="administrateur">Administrateur</option>
-                    <option value="consultant">Consultant</option>
-                    <option value="recruteur">Recruteur</option>
-                    <option value="candidat">Candidat</option>
+                    <option value="administrateurs">Administrateurs</option>
+                    <option value="consultants">Consultants</option>
+                    <option value="recruteurs">Recruteurs</option>
+                    <option value="candidats">Candidats</option>
                 </select>
 
                 <label className='mt-2'>Nom</label>

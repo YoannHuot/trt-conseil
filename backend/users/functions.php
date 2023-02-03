@@ -1,13 +1,5 @@
 <?php
 
-/*
-* Encodage des données du token JWT
-*/
-function base64UrlEncode($data)
-{
-    $result = base64_encode(json_encode(($data)));
-    return str_replace(['+', '/', '='], ['-', '_', ''], $result);
-}
 
 /*
 * Récupération de toutes les adresses emails de tous les utilisateurs pour checker les validités.
@@ -38,11 +30,11 @@ function fetchCurrentUser($fetchBdd, $db, $role, $email, $password)
 
         foreach ($usersRole as $index => $users) {
 
-            var_dump(password_verify($password, $users["password"]));
             if ($users["email"] === $email && password_verify($password, $users["password"])) {
                 return $users;
-            } else echo ("cet email n'existe pas");
+            }
         }
+        echo ("cet email n'existe pas");
     } else {
         var_dump($role);
         echo "role non valide";
@@ -113,4 +105,36 @@ function insertData($db, $table, $nom, $prenom, $email, $password, $entreprise, 
         $db->rollBack();
         echo "Failed: " . $e->getMessage();
     }
+}
+
+
+/*
+* Encodage des données du token JWT
+*/
+function base64UrlEncode($data)
+{
+    $result = base64_encode(json_encode(($data)));
+    return str_replace(['+', '/', '='], ['-', '_', ''], $result);
+}
+
+
+function getJwtToken($payload, $secret)
+{
+    $header = [
+        'typ' => 'JWT',
+        'alg' => 'HS256'
+    ];
+
+    $header = base64UrlEncode($header);
+    $payload = base64UrlEncode($payload);
+    $secret = base64_encode($secret);
+    // var_dump($secret);
+
+    $signature = hash_hmac('sha256', $header . '.' . $payload, $secret, true);
+    $signature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
+
+    // var_dump($signature);
+    $jwt = "$header.$payload.$signature";
+
+    return json_encode(array("jwt" => $jwt));;
 }

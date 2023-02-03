@@ -8,22 +8,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $all_users = fetchEmails($fetchBdd, $db);
     $emailExist = checkEmail($email, $all_users);
 
+
     if ($emailExist === true) {
+        echo ("emailExist");
+
         echo "Cette adresse mail est déjà enregistrée.";
     } else {
         $passwordHashed =   password_hash($password, PASSWORD_BCRYPT);
         if (checkSpy($email)) {
             switch ($role) {
-                case "candidat":
+                case "candidats":
                     insertData($db, "candidats", $nom, $prenom, $email, $passwordHashed, $entreprise, $role);
                     break;
-                case "recruteur":
-                    insertData($db, "recuteurs", $nom, $prenom, $email, $passwordHashed, $entreprise, $role);
+                case "recruteurs":
+                    $result = insertData($db, "recuteurs", $nom, $prenom, $email, $passwordHashed, $entreprise, $role);
                     break;
-                case "consultant":
+                case "consultants":
                     insertData($db, "consultants", $nom, $prenom, $email, $passwordHashed, $entreprise, $role);
                     break;
-                case "administrateur":
+                case "administrateurs":
                     if (isAdmin($email)) {
                         insertData($db, "administrateurs", $nom, $prenom, $email, $passwordHashed, $entreprise, $role);
                     }

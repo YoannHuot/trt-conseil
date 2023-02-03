@@ -1,5 +1,7 @@
 
 
 export const initialState = {
-    logged: false
+    logged: false,
+    jwt: ""
 };
+
