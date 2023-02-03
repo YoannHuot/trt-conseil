@@ -16,13 +16,13 @@ const useAuth = () => {
                     dispatch(updateLogged(true));
                 } else {
                     setResponse(response.data);
-                    // Traiter les données de réponse ici
+                    console.log(response.data);
                 }
             })
             .catch(error => {
                 console.log(error);
-                // Traiter l'erreur ici
             });
+
 
     };
 

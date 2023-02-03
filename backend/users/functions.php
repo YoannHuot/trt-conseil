@@ -1,6 +1,15 @@
 <?php
 
 /*
+* Encodage des données du token JWT
+*/
+function base64UrlEncode($data)
+{
+    $result = base64_encode(json_encode(($data)));
+    return str_replace(['+', '/', '='], ['-', '_', ''], $result);
+}
+
+/*
 * Récupération de toutes les adresses emails de tous les utilisateurs pour checker les validités.
 */
 function fetchEmails($fetchBdd, $db)
@@ -29,13 +38,13 @@ function fetchCurrentUser($fetchBdd, $db, $role, $email, $password)
 
         foreach ($usersRole as $index => $users) {
 
-            if ($users["email"] === $email && $users["password"] === $password) {
+            var_dump(password_verify($password, $users["password"]));
+            if ($users["email"] === $email && password_verify($password, $users["password"])) {
                 return $users;
-            } else echo ("cet utilisateur n'existe pas");
+            } else echo ("cet email n'existe pas");
         }
-
-        // var_dump($usersRole);
     } else {
+        var_dump($role);
         echo "role non valide";
     }
 }

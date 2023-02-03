@@ -11,7 +11,6 @@ const Homepage = ({ user }) => {
     const auth = useAuth()
     const [isLogged, setIsLogged] = useState(false)
 
-    console.log(user);
     useEffect(() => {
         if (auth.authStore.logged) {
             setIsLogged(true)

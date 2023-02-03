@@ -2,6 +2,7 @@
 require_once '../config.php';
 require_once 'functions.php';
 require_once 'data.php';
+require_once 'private-key.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $mail = $_GET['mail'];
@@ -10,11 +11,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 
     $current_user = fetchCurrentUser($fetchBdd, $db, $role, $mail, $password);
+
     $user_mail = $current_user["email"];
     $user_password = $current_user["password"];
     $user_id = $current_user["id"];
+    $user_name = $current_user["nom"];
+    $user_firstname = $current_user["prenom"];
 
-    var_dump($user_id);
+
 
     // Si l'utilisateur existe => Je lui crée un token de connexion et je passe le state logged à true
     // Une fois sur la homepage je check si le "created_by" est null :
@@ -27,14 +31,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Côté consultant idem que administrateur mais avec les candidats et les recruteurs. 
 
     $header = [
-        'typ' => 'HS256',
-        'alg' => 'JWT'
+        'typ' => 'JWT',
+        'alg' => 'HS256'
     ];
 
     $payload = [
-        'role' => $role,
-        'id' => $id,
+        'user_id' => $user_id,
+        'roles' => $role,
+        'name' => $user_name,
+        'firstname' => $user_firstname
     ];
 
-    // $base64Header = base64_encode(json_encode(($header)));
+
+    if ($user_id) {
+        $header = base64UrlEncode($header);
+        $payload = base64UrlEncode($payload);
+
+        // on génère la signature
+        $secret = base64_encode(SECRET);
+        var_dump($secret);
+
+        $signature = hash_hmac('sha256', $header . '.' . $payload, $secret, true);
+        $signature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
+
+        var_dump($signature);
+        $jwt = "$header.$payload.$signature";
+        echo $jwt;
+    }
 };
