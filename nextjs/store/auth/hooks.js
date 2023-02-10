@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector, } from "react-redux";
-import { updateLogged, updateToken } from "./actions";
+import { updateLogged, updateToken, checkValidation } from "./actions";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const useAuth = () => {
     const dispatch = useDispatch();
@@ -9,6 +10,7 @@ const useAuth = () => {
 
     const [response, setResponse] = useState()
     const [loginResponse, setLoginResponse] = useState()
+    const [validation, setValidation] = useState()
 
     const signup = async (e) => {
         await axios.post("http://localhost:8000/users/insert.php", { payload: e })
@@ -30,8 +32,10 @@ const useAuth = () => {
             .then(response => {
                 if (response.data.jwt && response.data.jwt.length > 25) {
                     dispatch(updateToken(true, response.data.jwt))
+                    Cookies.set('jwt', response.data.jwt, { expires: 7 })
                 } else {
-                    console.log((response.data));
+                    setValidation(response.data.validation)
+
                 }
             })
             .catch(error => {
@@ -40,12 +44,23 @@ const useAuth = () => {
             });
     }
 
+    const checkToken = async (data) => {
+        const payload = { token: data }
+        await axios.get('http://localhost:8000/pages/homepage.php', { params: payload })
+            .then(response => {
+                dispatch(checkValidation(response.data.validation, response.data.role))
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
 
     return {
         authStore,
         signup,
         response,
         login,
+        checkToken
         // signup,
     };
 };

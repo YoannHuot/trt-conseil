@@ -1,7 +1,7 @@
 <?php
-require_once '../config.php';
-require_once 'functions.php';
-require_once 'data.php';
+require_once '../config/config.php';
+require_once '../functions.php';
+require_once '../config/data.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Data from app 
@@ -16,17 +16,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $user_id = $current_user["id"];
     $user_name = $current_user["nom"];
     $user_firstname = $current_user["prenom"];
-
+    $user_validation = $current_user["created_by"];
 
     $payload = [
+        'id' => $user_id,
         'roles' => $role,
         'name' => $user_name,
         'firstname' => $user_firstname,
-        'mail' => $user_mail
+        'mail' => $user_mail,
+        'validation' => $user_validation
     ];
 
     if ($user_id) {
-        $jwt = getJwtToken($payload, $secret);
+        $jwt = getJwtToken($payload, SECRET);
         echo $jwt;
     }
 };

@@ -99,21 +99,6 @@ const Signup = ({ selected }) => {
         resetSecurity()
     }, [selected])
 
-
-    /*
-    *
-    * Fetch Data  
-    *
-    */
-    useEffect(() => {
-        axios.get('http://localhost:8000/user.php')
-            .then(response => setDataFetched(response.data))
-            .catch(error => {
-                console.log(error);
-            });
-    }, [])
-
-
     /*
     * 
     * current role to change state
@@ -313,11 +298,6 @@ const Signup = ({ selected }) => {
             router.push("/homepage")
         }
     }, [auth.authStore])
-
-
-    // Quand je clique sur confirmer, je fais lance une fonction auth.login => cette fonction renvoie un token avec approuved_by dedans
-    // Si cette variable est null je suis redirigé vers une page d'attente
-    // Si cette variable est vrai je suis redirigé vers le site 
 
     return (
         <>

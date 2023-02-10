@@ -1,6 +1,28 @@
 <?php
 
 
+
+/*
+* Permet de formater les données d'une requête Poste
+*/
+function getRequestDataBody()
+{
+    $body = file_get_contents('php://input');
+
+    if (empty($body)) {
+        return [];
+    }
+
+    // Parse json body and notify when error occurs
+    $data = json_decode($body, true);
+    if (json_last_error()) {
+        trigger_error(json_last_error_msg());
+        return [];
+    }
+
+    return $data;
+}
+
 /*
 * Récupération de toutes les adresses emails de tous les utilisateurs pour checker les validités.
 */
@@ -28,13 +50,13 @@ function fetchCurrentUser($fetchBdd, $db, $role, $email, $password)
         $request->execute();
         $usersRole = $request->fetchAll();
 
-        foreach ($usersRole as $index => $users) {
 
+        foreach ($usersRole as $index => $users) {
             if ($users["email"] === $email && password_verify($password, $users["password"])) {
                 return $users;
             }
         }
-        echo ("cet email n'existe pas");
+        echo ("Informations invalides");
     } else {
         var_dump($role);
         echo "role non valide";
@@ -88,6 +110,24 @@ function isAdmin($email)
 }
 
 /*
+* Récupération des consultants non validés par les adminsitrateurs
+*/
+function fetchUserUnValidate($db, $fetchBdd)
+{
+    $consultantsUnvalidate = array();
+
+    $request = $db->prepare($fetchBdd["consultants"]);
+    $request->execute();
+    $consultants = $request->fetchAll();
+
+    foreach ($consultants as $index => $consultant) {
+        if ($consultant["created_by"] === NULL) {
+            array_push($consultantsUnvalidate, $consultant);
+        }
+    }
+    return $consultantsUnvalidate;
+}
+/*
 * Requête d'insertion dans la base de données selon le rôle
 */
 function insertData($db, $table, $nom, $prenom, $email, $password, $entreprise, $role)
@@ -107,7 +147,6 @@ function insertData($db, $table, $nom, $prenom, $email, $password, $entreprise, 
     }
 }
 
-
 /*
 * Encodage des données du token JWT
 */
@@ -116,7 +155,6 @@ function base64UrlEncode($data)
     $result = base64_encode(json_encode(($data)));
     return str_replace(['+', '/', '='], ['-', '_', ''], $result);
 }
-
 
 function getJwtToken($payload, $secret)
 {
@@ -137,4 +175,29 @@ function getJwtToken($payload, $secret)
     $jwt = "$header.$payload.$signature";
 
     return json_encode(array("jwt" => $jwt));;
+}
+
+function decodeJwt($jwt, $secret)
+{
+
+    $parts = explode('.', $jwt);
+    if (count($parts) != 3) {
+        throw new Exception('Invalid JWT format');
+    }
+
+    list($header, $payload, $signatureProvided) = $parts;
+
+    $secret = base64_encode($secret);
+    $signatureExpected = hash_hmac('sha256', $header . '.' . $payload, $secret, true);
+    $signatureExpected = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signatureExpected));
+
+    $checkValidity = $signatureExpected === $signatureProvided;
+    $headerDecoded = base64_decode($header);
+    $payloadDecoded = base64_decode($payload);
+
+    return [
+        $headerDecoded,
+        $payloadDecoded,
+        $checkValidity
+    ];
 }

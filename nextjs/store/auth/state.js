@@ -2,6 +2,7 @@
 
 export const initialState = {
     logged: false,
-    jwt: ""
+    jwt: "",
+    certfied: false
 };
 

@@ -1,4 +1,4 @@
-import { UPDATE_LOGGED, UPDATE_TOKEN } from "./actions";
+import { UPDATE_LOGGED, UPDATE_TOKEN, CHECK_VALIDATION } from "./actions";
 import { initialState } from "./state";
 
 export default function authReducer(state = initialState, action) {
@@ -14,6 +14,12 @@ export default function authReducer(state = initialState, action) {
                 logged: action.logged,
                 jwt: action.jwt
 
+            };
+        case CHECK_VALIDATION:
+            return {
+                ...state,
+                certfied: action.certfied,
+                role: action.role
             };
         default:
             return state;

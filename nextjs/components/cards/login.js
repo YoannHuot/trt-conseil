@@ -8,7 +8,7 @@ const Login = () => {
     const auth = useAuth();
     const router = useRouter();
 
-    const [mail, setMail] = useState("Y.h@gmail.fr");
+    const [mail, setMail] = useState("Yoann.huot@gmail.com");
     const [password, setPassword] = useState("Yoshi90120!");
     const [role, setRole] = useState("recruteurs")
 
@@ -20,8 +20,6 @@ const Login = () => {
     useEffect(() => {
         if (auth.authStore.logged === true && auth.authStore.jwt.length > 0) {
             router.push("/homepage")
-        } else {
-            console.log("marche pas fdp");
         }
     }, [auth])
 

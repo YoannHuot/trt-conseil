@@ -17,3 +17,13 @@ export const updateToken = (logged, jwt) => {
         jwt: jwt
     };
 };
+
+export const CHECK_VALIDATION = "CHECK_VALIDATION";
+
+export const checkValidation = (certfied, role) => {
+    return {
+        type: CHECK_VALIDATION,
+        certfied: certfied,
+        role: role
+    };
+};
