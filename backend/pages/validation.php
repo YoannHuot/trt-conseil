@@ -12,20 +12,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $payload = json_decode($decodedToken[1], true);
     $validToken = $decodedToken[2];
 
-    if ($validToken && $payload["roles"] === "administrateurs") {
-        $usersUnvalidate = fetchUserUnValidate($db, $fetchBdd);
-        echo json_encode($usersUnvalidate);
+    if ($validToken) {
+        if ($payload["roles"] === "administrateurs") {
+            $usersUnvalidate = fetchUserUnValidate($db, $fetchBdd, "consultants");
+            echo json_encode($usersUnvalidate);
+        }
+        if ($payload["roles"] === "consultants") {
+
+            $recruteursUnvalidate = fetchUserUnValidate($db, $fetchBdd, "recruteurs");
+            $candidatsUnvalidate = fetchUserUnValidate($db, $fetchBdd, "candidats");
+
+            $response = array(
+                'candidats' => array(),
+                'recruteurs' => array()
+            );
+
+            foreach ($candidatsUnvalidate as $candidat) {
+
+                $response['candidats'][] = $candidat;
+            }
+
+            foreach ($recruteursUnvalidate as $recruteur) {
+                $response['recruteurs'][] = $recruteur;
+            }
+            echo json_encode($response);
+        }
     }
 };
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $token = $_POST['token'];
+    $data = getRequestDataBody();
+    $token = $data["payload"];
+
     $decodedToken = decodeJwt($token, SECRET);
 
     $header = $decodedToken[0];
     $payload = json_decode($decodedToken[1], true);
+
+    $user = $data["user"];
+    $role = $data["role"];
     $validToken = $decodedToken[2];
 
-    var_dump($data);
-    // if ($validToken && $payload["roles"] === "administrateurs") {
-    // }
+
+    if ($validToken) {
+        if ($payload["roles"] === "administrateurs") {
+            updateTableByRoleAndUser($db, 'consultants', 'created_by', $user["id"], $payload);
+        }
+        if ($payload["roles"] === "consultants") {
+            updateTableByRoleAndUser($db, $role, 'created_by', $user["id"], $payload);
+        }
+    }
 };

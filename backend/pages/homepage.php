@@ -14,6 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $payload = json_decode($decodedToken[1], true);
     $validToken = $decodedToken[2];
 
+    // Je dois checker dans la BDD si l'utilisateur exite + si son validated by est true ou pas. 
+
+    // $currentUser =  FetchCurrentUser($db, $fetchBdd, $payload["roles"], $payload["mail"]);
 
     if ($validToken) {
         if ($payload["roles"] === "administrateurs") {
@@ -21,18 +24,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 'validation' => true,
                 'response' => $success,
                 'role' => $payload["roles"],
+                'name' => $payload["name"],
+                'firstname' => $payload["firstname"]
             ]);
         } else if ($payload["validation"] === NULL) {
             echo json_encode([
                 'validation' => false,
                 'response' => $attente,
                 'role' => $payload["roles"],
+                'name' => $payload["name"],
+                'firstname' => $payload["firstname"]
             ]);
         } else {
             echo json_encode([
                 'validation' => true,
                 'response' => $success,
                 'role' => $payload["roles"],
+                'name' => $payload["name"],
+                'firstname' => $payload["firstname"]
             ]);
         }
     }

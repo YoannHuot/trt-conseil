@@ -1,6 +1,23 @@
 <?php
 
 
+/*
+* Permet de formater les données d'une requête Poste
+*/
+function updateTableByRoleAndUser($db, $table, $columnName, $userId, $adminId)
+{
+    try {
+        $sql = "UPDATE $table SET $columnName = :payload_id WHERE id = :id";
+        $stmt = $db->prepare($sql);
+
+        $values = array(':payload_id' => $adminId["id"], ':id' => $userId);
+
+        $stmt->execute($values);
+        echo ("New $ id : "  . json_encode($userId));
+    } catch (PDOException $e) {
+        echo "Erreur : " . $e->getMessage();
+    }
+}
 
 /*
 * Permet de formater les données d'une requête Poste
@@ -43,7 +60,7 @@ function fetchEmails($fetchBdd, $db)
 /*
 * Récupération du user en cours en fonction de son rôle et de son adresse email. 
 */
-function fetchCurrentUser($fetchBdd, $db, $role, $email, $password)
+function checkUserLogin($fetchBdd, $db, $role, $email, $password)
 {
     if (array_key_exists($role, $fetchBdd)) {
         $request = $db->prepare($fetchBdd[$role]);
@@ -109,23 +126,38 @@ function isAdmin($email)
     }
 }
 
+
+/*
+* Fetch current user
+*/
+function FetchCurrentUser($db, $fetchBdd, $role, $mail)
+{
+    $request = $db->prepare($fetchBdd[$role]);
+    $request->execute();
+    $users = $request->fetchAll();
+
+    foreach ($users as $index => $user) {
+        var_dump($user);
+    }
+}
+
 /*
 * Récupération des consultants non validés par les adminsitrateurs
 */
-function fetchUserUnValidate($db, $fetchBdd)
+function fetchUserUnValidate($db, $fetchBdd, $role)
 {
-    $consultantsUnvalidate = array();
+    $usersUnvalidate = array();
 
-    $request = $db->prepare($fetchBdd["consultants"]);
+    $request = $db->prepare($fetchBdd[$role]);
     $request->execute();
-    $consultants = $request->fetchAll();
+    $users = $request->fetchAll();
 
-    foreach ($consultants as $index => $consultant) {
-        if ($consultant["created_by"] === NULL) {
-            array_push($consultantsUnvalidate, $consultant);
+    foreach ($users as $index => $users) {
+        if ($users["created_by"] === NULL) {
+            array_push($usersUnvalidate, $users);
         }
     }
-    return $consultantsUnvalidate;
+    return $usersUnvalidate;
 }
 /*
 * Requête d'insertion dans la base de données selon le rôle

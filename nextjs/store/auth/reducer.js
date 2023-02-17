@@ -19,7 +19,9 @@ export default function authReducer(state = initialState, action) {
             return {
                 ...state,
                 certfied: action.certfied,
-                role: action.role
+                role: action.role,
+                firstname: action.firstname,
+                name: action.name
             };
         default:
             return state;

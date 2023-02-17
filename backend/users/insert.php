@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 break;
             case "recruteurs":
                 if (checkSpy($email)) {
-                    $result = insertData($db, "recuteurs", $nom, $prenom, $email, $passwordHashed, $entreprise, $role);
+                    $result = insertData($db, "recruteurs", $nom, $prenom, $email, $passwordHashed, $entreprise, $role);
                 }
                 break;
             case "consultants":

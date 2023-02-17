@@ -48,7 +48,7 @@ const useAuth = () => {
         const payload = { token: data }
         await axios.get('http://localhost:8000/pages/homepage.php', { params: payload })
             .then(response => {
-                dispatch(checkValidation(response.data.validation, response.data.role))
+                dispatch(checkValidation(response.data.validation, response.data.role, response.data.name, response.data.firstname))
             })
             .catch(error => {
                 console.log(error);

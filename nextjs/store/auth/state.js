@@ -3,6 +3,8 @@
 export const initialState = {
     logged: false,
     jwt: "",
-    certfied: false
+    certfied: false,
+    name: "",
+    firstname: ""
 };
 

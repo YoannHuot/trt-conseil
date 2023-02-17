@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $password = $_GET['password'];
     $role = trim(strtolower($_GET['role']));
 
-    $current_user = fetchCurrentUser($fetchBdd, $db, $role, $mail, $password);
+    $current_user = checkUserLogin($fetchBdd, $db, $role, $mail, $password);
 
     // Data fetched bdd 
     $user_mail = $current_user["email"];

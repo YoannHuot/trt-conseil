@@ -14,7 +14,7 @@ $jwt = $data->payload->token;
 
 $fetchBdd = array(
     "administrateurs" => "SELECT * FROM administrateurs",
-    "recruteurs" => "SELECT * FROM recuteurs",
+    "recruteurs" => "SELECT * FROM recruteurs",
     "consultants" => "SELECT * FROM consultants",
     "candidats" => "SELECT * FROM candidats",
 );

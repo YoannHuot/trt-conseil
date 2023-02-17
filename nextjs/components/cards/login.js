@@ -8,9 +8,9 @@ const Login = () => {
     const auth = useAuth();
     const router = useRouter();
 
-    const [mail, setMail] = useState("Yoann.huot@gmail.com");
+    const [mail, setMail] = useState("admin@admin-trt.fr");
     const [password, setPassword] = useState("Yoshi90120!");
-    const [role, setRole] = useState("recruteurs")
+    const [role, setRole] = useState("administrateurs")
 
     const handleSubmit = () => {
         const data = { mail: mail, password: password, role: role }

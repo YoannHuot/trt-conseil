@@ -20,10 +20,12 @@ export const updateToken = (logged, jwt) => {
 
 export const CHECK_VALIDATION = "CHECK_VALIDATION";
 
-export const checkValidation = (certfied, role) => {
+export const checkValidation = (certfied, role, name, firstname) => {
     return {
         type: CHECK_VALIDATION,
         certfied: certfied,
-        role: role
+        role: role,
+        name: name,
+        firstname: firstname
     };
 };
