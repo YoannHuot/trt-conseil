@@ -14,9 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $payload = json_decode($decodedToken[1], true);
     $validToken = $decodedToken[2];
 
-    // Je dois checker dans la BDD si l'utilisateur exite + si son validated by est true ou pas. 
-
-    // $currentUser =  FetchCurrentUser($db, $fetchBdd, $payload["roles"], $payload["mail"]);
+    // checker dans la BDD si l'utilisateur exite + si son validated by est true ou pas. 
 
     if ($validToken) {
         if ($payload["roles"] === "administrateurs") {

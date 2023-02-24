@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         switch ($role) {
             case "candidats":
                 if (checkSpy($email)) {
-                    insertData($db, "candidats", $nom, $prenom, $email, $passwordHashed, $entreprise, $role);
+                    insertData($db, "candidats", $nom, $prenom, $email, $passwordHashed, "", $role);
                 }
                 break;
             case "recruteurs":

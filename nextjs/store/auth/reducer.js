@@ -18,7 +18,7 @@ export default function authReducer(state = initialState, action) {
         case CHECK_VALIDATION:
             return {
                 ...state,
-                certfied: action.certfied,
+                certified: action.certified,
                 role: action.role,
                 firstname: action.firstname,
                 name: action.name

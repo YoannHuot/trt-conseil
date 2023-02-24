@@ -105,7 +105,7 @@ const Signup = ({ selected }) => {
     *
     */
     useEffect(() => {
-        if (role === "candidat") {
+        if (role === "candidats") {
             setIsCandidat(true)
         } else {
             setIsCandidat(false)
@@ -299,63 +299,69 @@ const Signup = ({ selected }) => {
         }
     }, [auth.authStore])
 
+
     return (
-        <>
-            <div className='flex flex-col h-full justify-center w-1/2 '>
+        <div className='flex flex-col items-center flex-1'>
+            <div className='flex flex-col h-full justify-center w-full '>
+                <div className='flex flex-col px-24'>
+                    <label className='mt-4'>Vous êtes  </label>
+                    <select className='bg-app-blue bg-opacity-5 py-2 px-2 rounded-lg' defaultValue={role} onChange={(e) => setRole(e.target.value)}>
+                        <option value="administrateurs">Administrateurs</option>
+                        <option value="consultants">Consultants</option>
+                        <option value="recruteurs">Recruteurs</option>
+                        <option value="candidats">Candidats</option>
+                    </select>
+
+                    <label className='mt-2'>Nom</label>
+                    <input className='bg-app-blue bg-opacity-5 py-2 px-2 rounded-lg' type={"text"} value={name} onChange={(e) => setName(e.target.value)} />
+
+                    <label className='mt-2'>Prénom</label>
+                    <input className='bg-app-blue bg-opacity-5 py-2 px-2 rounded-lg' type={"text"} value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+
+                    {!isCandidat &&
+                        <>
+                            <label className='mt-2'>Entreprise</label>
+                            <input className='bg-app-blue bg-opacity-5 py-2 px-2 rounded-lg' type={"text"} value={compagny} onChange={(e) => setCompagny(e.target.value)} />
+                        </>
+                    }
+
+                    <label className='mt-2'>Mail</label>
+                    <input className={`bg-app-blue bg-opacity-5 py-2 px-2 rounded-lg ${mailValid ? "text-black" : "text-red-400"}`} type={"text"} value={mail} onChange={(e) => setMail(e.target.value)} />
+
+                    <label className='mt-2'>Mot de passe</label>
+                    <input className='bg-app-blue bg-opacity-5 py-2 px-2 rounded-lg' type={"password"} value={password} onChange={(e) => setPassword(e.target.value)} />
+
+                    <label className='mt-2'>Confirmer votre mot de passe</label>
+                    <input className='bg-app-blue bg-opacity-5 py-2 px-2 rounded-lg' type={"password"} value={password2} onChange={(e) => setPassword2(e.target.value)} />
 
 
-                <label className='mt-4'>Vous êtes  </label>
-                <select defaultValue={role} onChange={(e) => setRole(e.target.value)}>
-                    <option value="administrateurs">Administrateurs</option>
-                    <option value="consultants">Consultants</option>
-                    <option value="recruteurs">Recruteurs</option>
-                    <option value="candidats">Candidats</option>
-                </select>
 
-                <label className='mt-2'>Nom</label>
-                <input type={"text"} value={name} onChange={(e) => setName(e.target.value)} />
-
-                <label className='mt-2'>Prénom</label>
-                <input type={"text"} value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-
-                {!isCandidat &&
-                    <>
-                        <label className='mt-2'>Entreprise</label>
-                        <input type={"text"} value={compagny} onChange={(e) => setCompagny(e.target.value)} />
-                    </>
-                }
-
-                <label className='mt-2'>Mail</label>
-                <input type={"text"} value={mail} onChange={(e) => setMail(e.target.value)} className={`${mailValid ? "text-black" : "text-red-400"}`} />
-
-                <label className='mt-2'>Mot de passe</label>
-                <input type={"password"} value={password} onChange={(e) => setPassword(e.target.value)} />
-
-                <label className='mt-2'>Confirmer votre mot de passe</label>
-                <input type={"password"} value={password2} onChange={(e) => setPassword2(e.target.value)} />
-
-
-                {
-                    isCandidat && candidatValidity || !isCandidat && otherValidity ?
-                        <SubmitValid handleSubmit={handleSubmit} /> :
-                        <SubmitUnvalid />
-                }
+                </div>
+                <div className='px-32 md:px-48 w-full'>
+                    {
+                        isCandidat && candidatValidity || !isCandidat && otherValidity ?
+                            <SubmitValid handleSubmit={handleSubmit} /> :
+                            <SubmitUnvalid />
+                    }
+                </div>
             </div>
-            <div className='w-2/3 h-2/5 flex flex-col  '>
-                {message && selected && <>
-                    <p className='font-bold'>Mot de passe check </p>
-                    <div className='grid grid-cols-3 gap-1 my-2 '>
-                        {_.map(checked, (c, i) => {
-                            return (
-                                <div key={i} className='flex flew-row w-full  items-center'>
-                                    <div className='w-2 h-2 bg-red-400 rounded-full' />
-                                    <p className='pl-2 capitalize'>{c}</p>
-                                </div>
-                            )
-                        })}
-                    </div>
-                </>}
-                {message && selected &&
+            <div className='w-full h-36 flex flex-col mt-4 pt-8 pb-4 px-10 bg-app-blue bg-opacity-5 '>
+
+                {!message && !selected &&
+                    <>
+                        <p className='font-bold'>Mot de passe check </p>
+                        <div className='grid grid-cols-3 gap-1 my-2 '>
+                            {_.map(checked, (c, i) => {
+                                return (
+                                    <div key={i} className='flex flew-row w-full  items-center'>
+                                        <div className='w-2 h-2 bg-red-400 rounded-full' />
+                                        <p className='pl-2 capitalize'>{c}</p>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </>}
+                {message && !selected &&
                     <>
                         <p className='pb-2'>{message}</p>
                         <div className='w-full h-6 rounded-full flex flex-row capitalize'>
@@ -378,12 +384,11 @@ const Signup = ({ selected }) => {
                             <>
                                 <span className='mt-6'>{response}</span>
                             </>}
-
                     </>
                 }
 
             </div>
-        </>
+        </div>
 
     )
 }

@@ -19,7 +19,7 @@ const useAuth = () => {
                     dispatch(updateLogged(true));
                 } else {
                     setResponse(response.data);
-                    console.log(response);
+                    console.log(response.data);
                 }
             })
             .catch(error => {

@@ -11,33 +11,31 @@ export default function Home() {
   const [selected, setSelected] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen h-full bg-green-400">
+    <div className="flex flex-col min-h-screen h-full ">
       <Header />
-      <div className="bg-red-400 flex-1 flex justify-center items-center">
-        <div className="bg-blue-500 w-2/3 h-auto" style={{ height: "650px" }}>
-          <div className="w-full flex-row flex justify-between h-12">
-            <button className={` "inscription flex justify-center items-center w-1/2" ${selected ? "bg-green-300" : "bg-white"}`} onClick={() => {
-              setSelected(!selected)
+      <div className=" flex-1 flex justify-center items-center"
+        style={{ backgroundImage: `url(${'./assets/background.jpg'})`, backgroundSize: 'cover' }}
+      >
+        <div className="bg-app-gray h-full w-2/3 rounded-2xl overflow-hidden drop-shadow-xl flex flex-col justify-between" style={{ height: "850px" }}>
+          <div className="w-full flex-row flex justify-between h-16">
+            <button className={`inscription h-full flex justify-center items-center w-1/2 ${selected ? "bg-app-blue text-white" : "bg-white"}`} onClick={() => {
+              setSelected(true)
             }}>
               <p>Connexion</p>
             </button>
-            <button className={` "inscription flex justify-center items-center w-1/2" ${selected ? "bg-white" : "bg-green-400"}`} onClick={() => {
-              setSelected(!selected)
+            <button className={`inscription h-full flex justify-center items-center w-1/2 ${selected ? "bg-white" : "bg-app-blue text-white"}`} onClick={() => {
+              setSelected(false)
             }}>
               <p>Inscription</p>
             </button>
           </div>
-          <div className='h-full flex items-center justify-center bg-blue-500  w-full flex-col '>
-            {selected ?
-              <Login />
-              :
-              <Signup selected={selected} />
-            }
-
-          </div>
+          {selected ?
+            <Login />
+            :
+            <Signup selected={selected} />
+          }
         </div>
       </div>
-      <Footer />
     </div>
 
   )

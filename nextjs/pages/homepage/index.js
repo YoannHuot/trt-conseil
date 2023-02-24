@@ -5,10 +5,9 @@ import Footer from "../../components/Footer";
 import useAuth from '../../store/auth/hooks';
 import { useRouter } from 'next/router'
 import _ from 'underscore';
-import Administrateurs from '../../components/roles/Administrateurs';
-import Consultants from '../../components/roles/Consultant';
-import Candidats from '../../components/roles/Candidats';
-import Recruteurs from '../../components/roles/Recruteurs';
+import Administrateurs from '../../components/roles/administrateurs';
+import Candidats from '../../components/roles/candidats';
+import Recruteurs from '../../components/roles/recruteurs';
 
 
 const Homepage = () => {
@@ -31,7 +30,7 @@ const Homepage = () => {
     }, [])
 
     useEffect(() => {
-        setIsValidate(auth.authStore.certfied);
+        setIsValidate(auth.authStore.certified);
         if (auth.authStore.role) {
             router.replace('/homepage?=' + auth.authStore.role)
         }
@@ -40,44 +39,45 @@ const Homepage = () => {
     useEffect(() => {
         setName(auth.authStore.name);
         setFirstName(auth.authStore.firstname);
-    }, [auth.authStore])
+    }, [auth.authStore, auth.authStore])
 
 
     const getRole = useCallback(() => {
         switch (auth.authStore.role) {
-            case "administrateurs":
-                return (
-                    <Administrateurs firstname={firstname} name={name} />
-                )
-                break;
-            case "consultants":
-                return (
-                    <Consultants firstname={firstname} name={name} />
-                )
-                break;
             case "recruteurs":
                 return (
                     <Recruteurs firstname={firstname} name={name} />
                 )
                 break;
-
             case "candidats":
                 return (
                     <Candidats firstname={firstname} name={name} />
                 )
                 break;
-
             default:
-                break;
+                return (
+                    <Administrateurs firstname={firstname} name={name} />
+                )
         }
-    }, [auth.authStore])
+    }, [auth.authStore.role])
 
     return (
-        <div className="flex flex-col min-h-screen h-full bg-green-400 w-full">
+        <div className="flex flex-col min-h-screen h-full w-full"
+        >
             <Header />
+
             {isLogged ?
-                <div className="bg-red-400 flex-1 flex justify-center items-center w-full">
-                    {getRole()}
+                <div className="bg-white flex-1 flex justify-center items-center w-full"
+                    style={{ backgroundImage: `url(${'./assets/bg-admin.jpg'})`, backgroundSize: 'cover' }}
+                >
+                    <div className='flex flex-col justify-center items-center'>
+                        <span className='pb-10 font-bold text-white shadow-sm text-xl uppercase text-center px-8'>
+                            Bonjour {firstname + " " + name}, Bienvenue sur Trt-Conseil  espace des {auth.authStore.role}
+                        </span>
+                        {getRole()}
+
+                    </div>
+
                 </div>
                 :
                 <div className="bg-blue-400 flex-1 flex justify-center items-center">

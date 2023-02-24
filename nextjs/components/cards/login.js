@@ -24,23 +24,27 @@ const Login = () => {
     }, [auth])
 
     return (
-        <div className='flex flex-col justify-center'>
+        <div className='relative flex flex-col justify-center w-full h-full '>
 
-            <label className='mt-4'>Vous êtes  </label>
-            <select defaultValue={role} onChange={(e) => setRole(e.target.value)}>
-                <option value="administrateurs">Administrateur</option>
-                <option value="consultants">Consultant</option>
-                <option value="recruteurs">Recruteur</option>
-                <option value="candidats">Candidat</option>
-            </select>
+            <div className='flex flex-col px-24'>
+                <label className='mt-4'>Role</label>
+                <select className='bg-app-blue bg-opacity-5 py-2 px-2 rounded-lg ' defaultValue={role} onChange={(e) => setRole(e.target.value)}>
+                    <option value="administrateurs">Administrateur</option>
+                    <option value="consultants">Consultant</option>
+                    <option value="recruteurs">Recruteur</option>
+                    <option value="candidats">Candidat</option>
+                </select>
 
-            <label className='mt-2'>Mail</label>
-            <input type={"text"} value={mail} onChange={(e) => setMail(e.target.value)} />
+                <label className='mt-2'>Mail</label>
+                <input className='bg-app-blue bg-opacity-5 py-2 px-2 rounded-lg ' type={"text"} value={mail} onChange={(e) => setMail(e.target.value)} />
 
-            <label className='mt-2'>Mot de passe</label>
-            <input type={"text"} value={password} onChange={(e) => setPassword(e.target.value)} />
+                <label className='mt-2'>Mot de passe</label>
+                <input className='bg-app-blue bg-opacity-5 py-2 px-2 rounded-lg ' type={"text"} value={password} onChange={(e) => setPassword(e.target.value)} />
+            </div>
+            <div className='px-32 md:px-48 w-full'>
 
-            <SubmitValid handleSubmit={handleSubmit} />
+                <SubmitValid handleSubmit={handleSubmit} />
+            </div>
         </div>
     )
 }

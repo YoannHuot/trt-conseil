@@ -13,28 +13,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $validToken = $decodedToken[2];
 
     if ($validToken) {
-        if ($payload["roles"] === "administrateurs") {
-            $usersUnvalidate = fetchUserUnValidate($db, $fetchBdd, "consultants");
-            echo json_encode($usersUnvalidate);
-        }
         if ($payload["roles"] === "consultants") {
-
-            $recruteursUnvalidate = fetchUserUnValidate($db, $fetchBdd, "recruteurs");
-            $candidatsUnvalidate = fetchUserUnValidate($db, $fetchBdd, "candidats");
+            $usersUnvalidate = fetchUserUnValidate($db, $fetchBdd, "candidats");
 
             $response = array(
                 'candidats' => array(),
+            );
+
+            foreach ($usersUnvalidate as $user) {
+                $response['candidats'][] = $user;
+            }
+
+            echo json_encode($response);
+        }
+
+
+        if ($payload["roles"] === "administrateurs") {
+            $recruteursUnvalidate = fetchUserUnValidate($db, $fetchBdd, "recruteurs");
+            $consultantsUnvalidate = fetchUserUnValidate($db, $fetchBdd, "consultants");
+
+            $response = array(
+                'consultants' => array(),
                 'recruteurs' => array()
             );
 
-            foreach ($candidatsUnvalidate as $candidat) {
-
-                $response['candidats'][] = $candidat;
+            foreach ($consultantsUnvalidate as $consultant) {
+                $response['consultants'][] = $consultant;
             }
 
             foreach ($recruteursUnvalidate as $recruteur) {
                 $response['recruteurs'][] = $recruteur;
             }
+
             echo json_encode($response);
         }
     }
@@ -56,7 +66,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($validToken) {
         if ($payload["roles"] === "administrateurs") {
-            updateTableByRoleAndUser($db, 'consultants', 'created_by', $user["id"], $payload);
+            var_dump($role);
+            updateTableByRoleAndUser($db, $role, 'created_by', $user["id"], $payload);
         }
         if ($payload["roles"] === "consultants") {
             updateTableByRoleAndUser($db, $role, 'created_by', $user["id"], $payload);

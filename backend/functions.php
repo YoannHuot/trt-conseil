@@ -13,7 +13,7 @@ function updateTableByRoleAndUser($db, $table, $columnName, $userId, $adminId)
         $values = array(':payload_id' => $adminId["id"], ':id' => $userId);
 
         $stmt->execute($values);
-        echo ("New $ id : "  . json_encode($userId));
+        echo ("New id : "  . json_encode($userId));
     } catch (PDOException $e) {
         echo "Erreur : " . $e->getMessage();
     }
@@ -126,7 +126,6 @@ function isAdmin($email)
     }
 }
 
-
 /*
 * Fetch current user
 */
@@ -163,10 +162,11 @@ function fetchUserUnValidate($db, $fetchBdd, $role)
 * Requête d'insertion dans la base de données selon le rôle
 */
 function insertData($db, $table, $nom, $prenom, $email, $password, $entreprise, $role)
+
 {
     try {
         $db->beginTransaction();
-        if ($role === "candidat") {
+        if ($role === "candidats") {
             $db->exec("insert into $table (nom, prenom, email, password) values ( '$nom', '$prenom', '$email', '$password')");
         } else {
             $db->exec("insert into $table (nom, prenom, email, password, entreprise) values ( '$nom', '$prenom', '$email', '$password', '$entreprise')");

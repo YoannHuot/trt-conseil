@@ -2,29 +2,21 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { Provider } from 'react-redux';
-import store from '../../store/store'
 import useAuth from '../../store/auth/hooks';
+import Cookies from 'js-cookie';
 
 
-const Loader = ({ user }) => {
+const Profil = ({ user }) => {
     const auth = useAuth()
     const [isLogged, setIsLogged] = useState(false)
 
-    useEffect(() => {
-        if (auth.authStore.logged) {
-            setIsLogged(true)
-        } else setIsLogged(false)
-    }, [])
 
     return (
-        <div className="flex flex-col min-h-screen h-full bg-green-400">
+        <div className="flex flex-col min-h-screen h-full bg-green-400 w-full">
             <Header />
-            <div className="bg-blue-400 flex-1 flex justify-center items-center">
-                Un administrateur va approuver votre demande, merci de patienter
-            </div>
+            <div className="bg-red-400 flex-1 flex justify-center items-center w-full">Ok Profil</div>
             <Footer />
-        </div>
+        </div >
 
 
     )
@@ -41,4 +33,4 @@ export async function getStaticProps() {
     };
 }
 
-export default Loader
+export default Profil

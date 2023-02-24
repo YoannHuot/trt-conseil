@@ -4,6 +4,8 @@ require_once '../functions.php';
 require_once '../config/data.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    // Create JWT 
+
     // Data from app 
     $mail = $_GET['mail'];
     $password = $_GET['password'];
