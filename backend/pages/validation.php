@@ -3,6 +3,7 @@
 require_once '../config/config.php';
 require_once '../functions.php';
 require_once '../config/data.php';
+require_once '../functions-bdd.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $token = $_GET['token'];

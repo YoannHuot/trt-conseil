@@ -75,7 +75,6 @@ const Homepage = () => {
                             Bonjour {firstname + " " + name}, Bienvenue sur Trt-Conseil  espace des {auth.authStore.role}
                         </span>
                         {getRole()}
-
                     </div>
 
                 </div>

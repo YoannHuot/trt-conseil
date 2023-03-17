@@ -3,6 +3,7 @@
 require_once '../config/config.php';
 require_once '../functions.php';
 require_once '../config/data.php';
+require_once '../functions-bdd.php';
 $attente = "Un administrateur se charge de valider votre profil. Vous serez notifié une fois cette étape validée";
 $success = "Bienvenue sur la plateforme TRT-Conseil";
 

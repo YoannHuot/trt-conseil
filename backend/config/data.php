@@ -12,6 +12,8 @@ $entreprise = $data->payload->compagny;
 $role = $data->payload->role;
 $jwt = $data->payload->token;
 
+
+
 $fetchBdd = array(
     "administrateurs" => "SELECT * FROM administrateurs",
     "recruteurs" => "SELECT * FROM recruteurs",

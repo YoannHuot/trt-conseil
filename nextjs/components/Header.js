@@ -1,11 +1,19 @@
-import React from 'react'
+import React from "react";
+import { useRouter } from "next/router";
 
 const Header = () => {
-    return (
-        <div className='w-full h-24 bg-app-blue'>
-            <img className='cover h-full' src='/assets/logo-trt.svg' />
-        </div>
-    )
-}
+	const router = useRouter();
 
-export default Header
+	return (
+		<button
+			className="w-full h-24 bg-app-blue"
+			onClick={() => {
+				router.push("/homepage");
+			}}
+		>
+			<img className="cover h-full" src="/assets/logo-trt.svg" />
+		</button>
+	);
+};
+
+export default Header;
