@@ -43,7 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
 };
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $token = $_GET['token'];
     $decodedToken = decodeJwt($token, SECRET);
@@ -60,5 +59,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     } else { 
         echo("Vous n'êtes pas un recruteur");
     }
+    
+};
+
+if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+    $data = getRequestDataBody();
+    $token = $data["payload"];
+
+    $decodedToken = decodeJwt($token, SECRET);
+
+    $header = $decodedToken[0];
+    $payload = json_decode($decodedToken[1], true);
+
+    $userId = $payload["id"];
+
+    $formData = $data["data"];
+    $validToken = $decodedToken[2];
+
+
+    
+    if ($validToken && $payload["roles"] === "recruteurs") {
+
+        $poste = $data["data"]["poste"];
+        $lieu = $data["data"]["lieu"];
+        $description =$data["data"]["description"];
+        $horaires = $data["data"]["horaires"];
+        $salaires = $data["data"]["salaire"];
+        $competences = $data["data"]["competences"];
+
+        $created_by = $payload["id"];
+        $entreprise = $payload["entreprise"];
+        $role= $payload["roles"];
+        
+        $recordId = $data["data"]["id"];
+
+        updateAnnonce($db, "annonces", $recordId, $poste, $lieu, $description, $horaires, $salaires, $competences, $entreprise);
+
+    } else {
+        echo("Vous n'êtes pas un recruteur");
+    }
+    
+};
+
+if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    $token = $_DELETE['payload'];
+    // $decodedToken = decodeJwt($token, SECRET);
+
+
+    
+        // $decodedToken = decodeJwt($token, SECRET);
+    
+        // $header = $decodedToken[0];
+        // $payload = json_decode($decodedToken[1], true);
+    
+        // $userId = $payload["id"];
+    
+        // $annonceId = $data["annonceId"];
+    
+        // $validToken = $decodedToken[2];
+    
+        // echo(json_encode($token));
+        echo($token);
+        // Vérifiez que le token est valide et que l'utilisateur est autorisé à supprimer cette annonce
+    
+        // Supprimez l'annonce de la base de données en utilisant son ID
+        // $query = "DELETE FROM annonces WHERE id = ?";
+        // $stmt = $conn->prepare($query);
+        // $stmt->bind_param("i", $annonceId);
+        // $stmt->execute();
+    
+        // // Retournez une réponse appropriée
+        // header('Content-Type: application/json');
+        // echo json_encode(array('success' => true, 'message' => 'Annonce supprimée avec succès'));
     
 };

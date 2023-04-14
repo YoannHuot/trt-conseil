@@ -1,5 +1,7 @@
 <?php
 
+
+
 function annonceExists($db, $poste, $horaires, $salaire, $entreprise) {
     $stmt = $db->prepare("SELECT COUNT(*) as count FROM annonces WHERE LOWER(poste) = :poste AND LOWER(horaires) = :horaires AND salaire = :salaire AND LOWER(entreprise) = :entreprise");
     $params = [

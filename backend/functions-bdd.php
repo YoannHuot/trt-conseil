@@ -1,6 +1,5 @@
 <?php
 
-
 /*
 * Fetch des annonces selon l'id de l'utilisateur 
 */
@@ -27,6 +26,43 @@ function getUserAnnonces($db, $userId) {
 
     return $annonces;
 }
+
+function updateAnnonce($db, $table, $id, $poste, $lieu, $description, $horaires, $salaires, $competences, $entreprise)
+{
+    try {
+        $db->beginTransaction();
+
+        $stmt = $db->prepare("UPDATE $table SET
+            poste = :poste,
+            lieu = :lieu,
+            description = :description,
+            horaires = :horaires,
+            salaire = :salaire,
+            competences = :competences,
+            entreprise = :entreprise
+            WHERE annonce_id = :id");
+
+        $params = [
+            ':id' => $id,
+            ':poste' => strtolower($poste),
+            ':lieu' => strtolower($lieu),
+            ':description' => strtolower($description),
+            ':horaires' => strtolower($horaires),
+            ':salaire' => $salaires,
+            ':competences' => strtolower($competences),
+            ':entreprise' => strtolower($entreprise)
+        ];
+
+        $stmt->execute($params);
+        $db->commit();
+        echo "Mise à jour réussie";
+
+    } catch (Exception $e) {
+        $db->rollBack();
+        echo "Échec : " . $e->getMessage();
+    }
+}
+
 
 /*
 * Insertion d'une annonce de recrutement
